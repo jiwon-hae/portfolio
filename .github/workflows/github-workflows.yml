@@ -1,5 +1,5 @@
 # Running Quality Gates
-name: PR - Static Analysis
+name: PR - Develop Branch
 
 # When PR Updated
 on:
@@ -61,38 +61,23 @@ jobs:
 
       - name: Run test coverage
         shell: bash
-        run: scripts/test_with_coverage.sh
-
-      # Make puml file (class diagram)
-      - name: Make puml file
         run: |
-          dart pub global activate dcdg
-          export PATH="$PATH":"$HOME/.pub-cache/bin"
-          cd domain
-          dcdg --search-path=lib/entity --output=../uml/domain_entity.puml --exclude-private=all --exclude="^flutter" --exclude-is-a
-          cd ..
+          chmod +x ../run_tests_with_coverage.sh
+          ../run_tests_with_coverage.sh
 
-      # Make puml to svg file (class diagram)
-      - name: Install Dependencies and Make puml to svg file
+      - name: Generate code coverage report
         run: |
-          sudo apt-get install graphviz
-          curl -L https://github.com/plantuml/plantuml/releases/download/v1.2023.11/plantuml.jar -o plantuml.jar
-          chmod +x plantuml.jar 
-          java -jar plantuml.jar -i uml/domain_entity.puml -o ../.github/uml -svg
+          lcov --capture --directory coverage/lcov.info --output-file coverage/coverage.info
+          lcov --remove coverage/coverage.info '/usr/*' --output-file coverage/coverage.info
+          lcov --list coverage/coverage.info
+          genhtml coverage/coverage.info --output-directory coverage/report
+        continue-on-error: true
 
-      # Upload svg file (class diagram)
-      - name: Commit Class Diagram File
-        uses: EndBug/add-and-commit@v7
-        with:
-          default_author: github_actions
-          message: 'chore: upload class diagram'
-          add: '.github/uml/domain_entity.svg'
-
-      - name: Upload LCOV report
+      - name: Upload code coverage report
         uses: actions/upload-artifact@v2
         with:
-          name: lcov-report
-          path: coverage/
+          name: coverage-report
+          path: coverage/report
 
       - name: Use Node.js to make badge
         uses: actions/setup-node@v3

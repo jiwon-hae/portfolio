@@ -17,19 +17,24 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      # 현재 경로 및 상위 경로 체크를 해본다.
+      # checks all folder directories
       - name: Check All Folder
         run: |
           ls
 
-      # 자바 버전 설정
+      # Sets java version
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           distribution: 'zulu'
           java-version: '12.x'
+          
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+            sdk: 3.1.5
 
-      # Flutter 버전 설정
+      # Sets flutter version
       - name: flutter setup
         uses: subosito/flutter-action@v2
         with:

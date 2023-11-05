@@ -62,8 +62,8 @@ jobs:
       - name: Run test coverage
         shell: bash
         run: |
-          chmod +x ../run_tests_with_coverage.sh
-          ../run_tests_with_coverage.sh
+          chmod +x script/run_tests_with_coverage.sh
+          script/run_tests_with_coverage.sh
 
       - name: Generate code coverage report
         run: |

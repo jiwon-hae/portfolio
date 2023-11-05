@@ -37,9 +37,9 @@ jobs:
 
       # Sets Dart version
       - name: dart setup
-        uses: dawidd6/action-setup-dart@v3
+        uses: dart-lang/setup-dart@v1
         with:
-          dart-version: 3.1.5  # Specify your desired Dart version here
+          sdk: 3.1.5
 
       # run flutter pub get
       - run: flutter pub get

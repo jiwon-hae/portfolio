@@ -1,25 +1,31 @@
-#!/bin/bash
+#! /bin/bash
 
-## Generate coverage report
-PROJECT_ROOT_PATH=$1
-PACKAGE_PATH=$2
-PACKAGE_NAME=$3
+# Install https://pub.dev/packages/remove_from_coverage
+flutter pub global activate remove_from_coverage
 
-PACKAGE_LCOV_INFO_PATH=$PROJECT_ROOT_PATH/coverage/lcov_$PACKAGE_NAME.info
-PACKAGE_TEST_REPORT_PATH=$PROJECT_ROOT_PATH/test_reports/${PACKAGE_NAME}_test_report.json
+red=$(tput setaf 1)
+none=$(tput sgr0)
+filename=
+open_browser=
 
-mkdir -p $PROJECT_ROOT_PATH/coverage/
-flutter test \
-  --no-pub \
-  --machine \
-  --coverage \
-  --coverage-path $PACKAGE_LCOV_INFO_PATH > $PACKAGE_TEST_REPORT_PATH
+run_tests() {
+    if [[ -f "pubspec.yaml" ]]; then
+        rm -f coverage/lcov.info
+        flutter test --coverage "$filename"
+        ch_dir
+    else
+        printf "\n${red}Error: this is not a Flutter project${none}\n"
+        exit 1
+    fi
+}
 
-escapedPath="$(echo $PACKAGE_PATH | sed 's/\//\\\//g')"
+echo '############################### Running tests ################################'
+run_tests
 
-# Requires gsed on MacOS machines because otherwise sed is not the same...
-if [[ "$OSTYPE" =~ ^darwin ]]; then
-  gsed -i "s/^SF:lib/SF:$escapedPath\/lib/g" $PACKAGE_LCOV_INFO_PATH
-else
-  sed -i "s/^SF:lib/SF:$escapedPath\/lib/g" $PACKAGE_LCOV_INFO_PATH
-fi
+echo '############################### Removing unwanted files ######################'
+# Remove with PATTERN
+flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'  -r '\.gr\.dart$'  -r '\.freezed\.dart$' -r '\.config\.dart$'
+flutter pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib/bloc/*' -r 'lib/common/*' -r 'lib/di/*' -r 'lib/infrastructure/*' -r 'lib/presentation/*'
+
+echo '############################### Generating coverage ##########################'
+genhtml coverage/lcov.info -o coverage

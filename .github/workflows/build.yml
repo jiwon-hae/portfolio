@@ -62,7 +62,9 @@ jobs:
 
       - name: Run test coverage
         shell: bash
-        run: scripts/test-with-coverage.sh
+        run: |
+          chmod +x scripts/test-with-coverage.sh 
+          scripts/test-with-coverage.sh
 
       - name: Upload LCOV report
         uses: actions/upload-artifact@v2

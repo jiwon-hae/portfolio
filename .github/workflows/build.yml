@@ -63,7 +63,7 @@ jobs:
       - name: Run test coverage
         shell: bash
         run: |
-          chmod +x scripts/test-with-coverage.sh 
+          chmod +rwx scripts/test-with-coverage.sh 
           scripts/test-with-coverage.sh
 
       - name: Upload LCOV report

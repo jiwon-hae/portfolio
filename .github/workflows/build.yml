@@ -2,24 +2,11 @@ name: 🔨🧪 Build & Test
 
 permissions: write-all
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
-  cancel-in-progress: true
-
 on:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
+    types: [ opened, reopened, synchronize ]
     branches:
-      - 'develop'
-    paths-ignore:
-      - '**.md'
-      - 'doc/**'
-      - '.git/'
-      - '.vscode/'
+      - develop
 
 jobs:
   testAndCoverage:

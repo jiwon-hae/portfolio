@@ -60,8 +60,7 @@ jobs:
           flutter pub run dart_code_metrics:metrics analyze test
 
       - name: Run test coverage
-        shell: bash
-        run: script/run_tests_with_coverage.sh
+        run : flutter test --coverage
 
       - name: Generate code coverage report
         run: |

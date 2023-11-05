@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 
-// class CommonAppBar {
-//   factory CommonAppBar.leading(Widget leading){
-//     return AppBar(
-//       leading: leading,
-//     );
-//   }
-//
-//
-// }
-
 class CommonAppBar extends StatelessWidget {
   const CommonAppBar({super.key, this.leading, this.actions});
 

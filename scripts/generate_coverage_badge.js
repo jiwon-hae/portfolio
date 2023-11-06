@@ -2,7 +2,7 @@ const lcov2badge = require("lcov2badge");
 const fs = require("fs");
 
 const logo = "./.github/badges/coverage_badge.svg";
-const lcov = "./data/coverage/lcov.info";
+const lcov = "./coverage/lcov.info";
 
 lcov2badge.badge(lcov, function (err, svgBadge) {
   if (err) throw err;

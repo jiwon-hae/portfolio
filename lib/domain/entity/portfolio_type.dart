@@ -1,0 +1,3 @@
+enum PortfolioType {
+  ai, flutter
+}

@@ -5,6 +5,7 @@ import 'presentation/feature/application/application_state.dart';
 import 'presentation/feature/home/home_screen.dart';
 import 'presentation/feature/application/application_cubit.dart';
 import 'presentation/feature/home/home_cubit.dart';
+import 'presentation/theme/themes.dart';
 
 void main() {
   configureDependencies(getIt);
@@ -18,14 +19,12 @@ class Portfolio extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Portfolio',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: MyTheme.light,
+      darkTheme: MyTheme.dark,
       home: MultiBlocProvider(
           providers: [
             BlocProvider(create: (BuildContext context) => getIt<ApplicationCubit>()),
-            BlocProvider(create: (BuildContext context) => getIt<HomeCubit>())
+            BlocProvider(create: (BuildContext context) => getIt<HomeCubit>()..init())
           ],
           child: BlocBuilder<ApplicationCubit, ApplicationState>(
               builder: (BuildContext context, ApplicationState state) {

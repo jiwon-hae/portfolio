@@ -1,0 +1,1 @@
+typedef ValueCallback<T> = Function(T value);

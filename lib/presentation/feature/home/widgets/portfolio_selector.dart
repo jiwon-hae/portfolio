@@ -1,14 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/callback/callbacks.dart';
 import 'package:portfolio/core/math/math_extension.dart';
 import '../../../model/ui_portfolio_entry.dart';
 import 'portfolio_selector_painter.dart';
 
 class PortfolioSelector extends StatefulWidget {
-  const PortfolioSelector({super.key, required this.portfolioEntries});
+  const PortfolioSelector({super.key, required this.portfolioEntries, required this.onAngleChanged});
 
   final List<UiPortfolioEntry> portfolioEntries;
+  final ValueCallback<int> onAngleChanged;
 
   @override
   State<PortfolioSelector> createState() => _PortfolioSelectorState();
@@ -36,8 +38,10 @@ class _PortfolioSelectorState extends State<PortfolioSelector> {
           setState(() {
             rotationAngle = (rotationAngle + details.delta.dx * 0.01) %
                 (2 * pi); // Adjust the rotation sensitivity
+
             double relativeAngle = (-rotationAngle).degrees();
-            bottomRightVertexIndex = (relativeAngle / (360 / numSide)).round();
+            bottomRightVertexIndex = (relativeAngle / (360 / numSide)).round().abs();
+            widget.onAngleChanged(bottomRightVertexIndex % (numSide ~/ 2));
           });
         },
         child: Transform.rotate(

@@ -1,8 +1,11 @@
 import 'dart:math';
 
 extension MathExtension on double {
-  double degrees(){
-    return this * 180 / pi;
+  double rad2deg(){
+    return this * (180 / pi);
   }
 
+  double deg2rad(){
+    return this * (pi / 180);
+  }
 }

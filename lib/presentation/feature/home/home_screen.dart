@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:portfolio/presentation/common/widgets/util.dart';
 import 'package:portfolio/presentation/feature/home/home_state.dart';
-import 'package:portfolio/presentation/feature/home/widgets/portfolio_selector.dart';
-
-import '../../common/gaps.dart';
+import 'package:portfolio/presentation/feature/home/widget/gallery_item.dart';
+import '../../../domain/entity/portfolio_type.dart';
+import '../../common/widgets/radial_listview/radial_listview.dart';
 import '../../model/ui_portfolio_entry.dart';
 import 'home_cubit.dart';
-import 'widgets/portfolio_picker_item.dart';
 
 typedef UiConst = HomeScreenUiConst;
 
@@ -19,82 +18,77 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FixedExtentScrollController portfolioSpinnerController =
-      FixedExtentScrollController();
-  int currentPortfolioIndex = 0;
-
   Widget body(HomeState state) {
-    return Padding(
-        padding: const EdgeInsets.only(right: 100),
-        child: Stack(children: <Widget>[
-          portfolioSelector(state.portfolioEntries),
-          Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  title(),
-                  Gaps.vertical(20),
-                  portfolioSpinner(state.portfolioEntries)
-                ],
-              ))
-        ]));
+    final Size screenSize = MediaQuery.of(context).size;
+    return Stack(children: [
+      Positioned(
+          top: screenSize.height * 0.5,
+          left: screenSize.width / 2 - screenSize.width * 0.9 / 2,
+          width: screenSize.width * 0.9,
+          height: screenSize.width * 0.9,
+          child: portfolioGallery()),
+      Align(
+          alignment: AlignmentDirectional.topCenter,
+          child: title()
+              .paddingWith(EdgeInsets.only(top: screenSize.height * 0.2)))
+    ]);
   }
 
   Widget title() {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Text('My\nPortfolio', style: textTheme.headlineLarge);
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(children: [
+        TextSpan(
+            text: 'PORTFOLIO',
+            style: textTheme.titleStyle(colorScheme.onBackground)),
+        if (projectSelected != null)
+          TextSpan(
+              text: ' #$projectSelected',
+              style: textTheme.titleStyle(Colors.black)),
+        TextSpan(
+            text: '\nwith AI',
+            style: textTheme.titleStyle(colorScheme.primary)),
+      ]),
+    );
   }
 
-  Widget portfolioSelector(List<UiPortfolioEntry> entries) {
-    return OverflowBox(
-        minWidth: 0,
-        minHeight: 0,
-        maxWidth: double.infinity,
-        maxHeight: double.infinity,
-        alignment: Alignment.topLeft,
-        child: PortfolioSelector(
-            portfolioEntries: entries, onAngleChanged: onPortfolioItemChanged));
-  }
+  int? projectSelected;
 
-  Widget portfolioSpinner(List<UiPortfolioEntry> entries) {
-    return SizedBox(
-        width: UiConst.portfolioSpinnerWidth,
-        height: UiConst.portfolioSpinnerHeight,
-        child: CupertinoPicker.builder(
-            itemExtent: UiConst.portfolioSpinnerItemHeight,
-            childCount: entries.length,
-            scrollController: portfolioSpinnerController,
-            onSelectedItemChanged: (int index) {},
-            itemBuilder: (BuildContext context, int index) {
-              return PortfolioPickerItem(label: entries[index].name);
-            }));
-  }
-
-  void onPortfolioItemChanged(int portfolioIndex) {
-    setState(() {
-      currentPortfolioIndex = portfolioIndex;
-      portfolioSpinnerController.animateToItem(portfolioIndex,
-          duration: const Duration(milliseconds: 10), curve: Curves.decelerate);
-    });
+  Widget portfolioGallery() {
+    return RadialListView(
+        items: List.generate(
+            40,
+            (index) => UiPortfolioEntry(
+                name: 'portfolio_#$index',
+                portfolioType: PortfolioType.flutter)),
+        onItemSelected: (int index) {
+          setState(() {
+            projectSelected = index;
+          });
+        },
+        itemBuilder: (BuildContext context, UiPortfolioEntry item) =>
+            GalleryItem(entry: item));
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return BlocBuilder<HomeCubit, HomeState>(
         builder: (BuildContext context, HomeState state) {
-      return Scaffold(backgroundColor: scheme.background, body: body(state));
+      return Scaffold(
+          backgroundColor: colorScheme.background, body: body(state));
     });
   }
 }
 
 mixin HomeScreenUiConst {
-  static double portfolioSpinnerWidth = 200;
-  static double portfolioSpinnerHeight = 100;
-
   static double portfolioSpinnerItemHeight = 50;
+}
+
+extension on TextTheme {
+  TextStyle? titleStyle(Color color) => displayLarge?.apply(color: color);
 }

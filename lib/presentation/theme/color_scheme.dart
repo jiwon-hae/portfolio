@@ -5,36 +5,34 @@ class ColorScheme {
 
   static const m3.ColorScheme light = m3.ColorScheme(
       brightness: m3.Brightness.light,
-      primary: m3.Color(0xFF5723ec),
-      onPrimary: m3.Color(0xFF000000),
-      secondary: m3.Color(0xFFE9A35B),
-      onSecondary: m3.Color(0xFF000000),
-      tertiary: m3.Color(0xFF61E8E4),
-      onTertiary: m3.Color(0xFF000000),
-      error: m3.Color(0xFFECC166),
-      onError: m3.Color(0xFF342404),
-      background: m3.Color(0xFFe2e2e3),
-      onBackground: m3.Color(0xFFDDDBDC),
-      surface: m3.Color(0xFFF0F4F4),
-      onSurface: m3.Color(0xFF3C4041),
-      primaryContainer: m3.Color(0xFF1d0c3b),
-      onPrimaryContainer: m3.Color(0xFFe2e2e3)
+      primary: m3.Color(0xFF005FCC),
+      onPrimary: m3.Color(0xFFFFFFFF),
+      secondary: m3.Color(0xFFFDC500),
+      onSecondary: m3.Color(0xFFFFFFFF),
+      tertiary: m3.Color(0xFFD8315B),
+      onTertiary: m3.Color(0xFFFFFFFF),
+      error: m3.Color(0xFFD8315B),
+      onError: m3.Color(0xFFFFFFFF),
+      background: m3.Color(0xFFFFFFFF),
+      onBackground: m3.Color(0xFF000000),
+      surface: m3.Color(0xFFD9D9D9),
+      onSurface: m3.Color(0xFF000000)
   );
-
 
   static const m3.ColorScheme dark = m3.ColorScheme(
-      brightness: m3.Brightness.dark,
-      primary: m3.Color(0xFFA26CF0),
-      onPrimary: m3.Color(0xFF000000),
-      secondary: m3.Color(0xFFE9A35B),
-      onSecondary: m3.Color(0xFF000000),
-      tertiary: m3.Color(0xFF61E8E4),
-      onTertiary: m3.Color(0xFF000000),
-      error: m3.Color(0xFFECC166),
-      onError: m3.Color(0xFF342404),
-      background: m3.Color(0xFFF5F4F5),
-      onBackground: m3.Color(0xFFDDDBDC),
-      surface: m3.Color(0xFFF0F4F4),
-      onSurface: m3.Color(0xFF3C4041)
+      brightness: m3.Brightness.light,
+      primary: m3.Color(0xFF005FCC),
+      onPrimary: m3.Color(0xFFFFFFFF),
+      secondary: m3.Color(0xFFFDC500),
+      onSecondary: m3.Color(0xFFFFFFFF),
+      tertiary: m3.Color(0xFFD8315B),
+      onTertiary: m3.Color(0xFFFFFFFF),
+      error: m3.Color(0xFFD8315B),
+      onError: m3.Color(0xFFFFFFFF),
+      background: m3.Color(0xFFFFFFFF),
+      onBackground: m3.Color(0xFF000000),
+      surface: m3.Color(0xFFD9D9D9),
+      onSurface: m3.Color(0xFF000000)
   );
+
 }

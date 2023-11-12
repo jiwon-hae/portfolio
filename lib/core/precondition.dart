@@ -4,6 +4,4 @@ class Precondition {
   static bool checkNotNull<T>(T? t){
     return t != null;
   }
-
-
 }
